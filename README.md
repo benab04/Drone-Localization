@@ -46,27 +46,22 @@ To use the YOLOv8 model for drone localization, follow these steps:
 3. Run the model on your images or videos:
    The dataset used for training and testing is:
     ```bash
-    !kaggle datasets download -d muki2003/yolo-drone-detection-dataset
+    kaggle datasets download -d muki2003/yolo-drone-detection-dataset
     ```
 
 ## Results
 
 ### Detected Drones in dataset
-
-![Detected Drones](images/detected_drones.jpg)
+![Test results](https://github.com/benab04/Drone-Localization/assets/124769045/99bd1e1f-64fd-4671-aca7-5beafcb4adb2)
 
 ### Evaluation Metrics
-
-
+![metrics](https://github.com/benab04/Drone-Localization/assets/124769045/afa94c45-9a61-4821-9fff-5f80e68c6ea7)
 
 #### Precision-Recall Curve
-
-![Precision-Recall Curve](evaluation_metrics/pr_curve.png)
+![PR_curve](https://github.com/benab04/Drone-Localization/assets/124769045/d23e7f7c-1191-4e2d-ab90-82163a7feb8a)
 
 #### Confusion Matrix
-
-![Confusion Matrix](evaluation_metrics/confusion_matrix.png)
-
+![Confusion Matrix](https://github.com/benab04/Drone-Localization/assets/124769045/430e7517-345f-4553-bb6c-b46cf22038b9)
 
 ## Acknowledgments
 

@@ -1,5 +1,5 @@
 # YOLOv8 Drone Localization
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1QKrzUchqZYSHeToXNfTdFUv3wskLRMjs?usp=sharing]
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1QKrzUchqZYSHeToXNfTdFUv3wskLRMjs?usp=sharing)
 
 This repository contains code for drone localization using the YOLOv8 object detection model. The model is trained to detect drones in images and videos in real-time. Additionally, it includes evaluation metrics such as precision-recall curves, F1 curve, and confusion matrix, providing insights into the model's performance.
 

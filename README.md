@@ -1,6 +1,8 @@
 # YOLOv8 Drone Localization
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1QKrzUchqZYSHeToXNfTdFUv3wskLRMjs?usp=sharing]
 
 This repository contains code for drone localization using the YOLOv8 object detection model. The model is trained to detect drones in images and videos in real-time. Additionally, it includes evaluation metrics such as precision-recall curves, F1 curve, and confusion matrix, providing insights into the model's performance.
+
 
 ## Features
 
@@ -48,6 +50,37 @@ To use the YOLOv8 model for drone localization, follow these steps:
     ```bash
     kaggle datasets download -d muki2003/yolo-drone-detection-dataset
     ```
+
+To further fine tune the model based on a custom dataset:
+
+1. Load the model:
+
+    ```bash
+    from ultralytics import YOLO
+    model = YOLO("runs/detect/train2/weights/200_epoch.pt")
+    ```
+
+2. Update data.yaml file with your custom dataset:
+
+    ```bash
+    config = {
+    "path": "/path/to/dataset",
+    "train": "/path/to/dataset/train",
+    "val": "/path/to/dataset/valid",
+    "nc": 1,
+    "names": ["drone"],
+    }
+    
+    with open("data.yaml", "w") as file:
+        yaml.dump(config, file, default_flow_style=False)
+    ```
+
+3. Train the model:
+   The dataset used for training and testing is:
+    ```bash
+    results = model.train(data="data.yaml", epochs=100, save_period=10, seed=seed)
+    ```
+
 
 ## Results
 

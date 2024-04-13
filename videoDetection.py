@@ -1,9 +1,6 @@
-import torch
 from ultralytics import YOLO
 import yaml
-import glob
 import matplotlib.pyplot as plt
-from PIL import Image
 import cv2
 import numpy as np
 

@@ -7,7 +7,7 @@ from PIL import Image
 import cv2
 import numpy as np
 
-model = YOLO("runs/detect/train2/weights/best.pt")
+model = YOLO("runs/detect/train2/weights/200_epoch.pt")
 config = {
     "path": "/drone_dataset",
     "train": "/drone_dataset/train",
@@ -16,10 +16,11 @@ config = {
     "names": ["drone"],
 }
 
-
 with open("data.yaml", "w") as file:
     yaml.dump(config, file, default_flow_style=False)
 
+# video_path = "videos/df_5.mp4"
+# camera = cv2.VideoCapture(video_path)
 camera = cv2.VideoCapture(0)
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)

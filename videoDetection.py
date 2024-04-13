@@ -1,62 +1,60 @@
-import cv2
+import torch
 from ultralytics import YOLO
+import yaml
+import glob
+import matplotlib.pyplot as plt
+from PIL import Image
+import cv2
+import numpy as np
 
-# Load the YOLOv5 model
 model = YOLO("runs/detect/train2/weights/200_epoch.pt")
-
-# Configuration for the detection task
 config = {
     "path": "/drone_dataset",
     "train": "/drone_dataset/train",
     "val": "/drone_dataset/valid",
-    "nc": 1,  # Number of classes
-    "names": ["drone"],  # Class names
+    "nc": 1,
+    "names": ["drone"],
 }
 
-# Open the video file
-video_path = "path/to/your/video.mp4"
-video_capture = cv2.VideoCapture(video_path)
+with open("data.yaml", "w") as file:
+    yaml.dump(config, file, default_flow_style=False)
 
-# Get video properties
-frame_width = int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = int(video_capture.get(cv2.CAP_PROP_FPS))
-codec = cv2.VideoWriter_fourcc(*'XVID')
+video_path = "videos/df_5.mp4"
+camera = cv2.VideoCapture(video_path)
+img_counter = 0
 
-# Define the output video writer
-output_video_path = "output_video_with_boxes.avi"
-output_video = cv2.VideoWriter(output_video_path, codec, fps, (frame_width, frame_height))
-
-# Process each frame of the video
-while video_capture.isOpened():
-    ret, frame = video_capture.read()
+while True:
+    ret, frame = camera.read()
 
     if not ret:
+        print("Failed to grab frame")
         break
 
-    # Detect objects in the frame
-    results = model(frame)
+    
 
-    # Draw bounding boxes and confidence scores
-    if results.pred:
-        for result in results.pred:
-            for det in result:
-                box = det.xyxy[0].cpu().numpy()
-                conf = det.conf.item()
-                if conf > 0.30:
-                    start = (int(box[0]), int(box[1]))
-                    end = (int(box[2]), int(box[3]))
-                    frame = cv2.rectangle(frame, start, end, (0, 255, 0), 2)
-                    frame = cv2.putText(frame, f'conf: {conf:.3f}', start, cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
-
-    # Write the frame to the output video
-    output_video.write(frame)
-
-# Release video capture and writer
-video_capture.release()
-output_video.release()
-
-# Close all windows
+    key = cv2.waitKey(1)
+    
+    if key % 256 == 27:
+        print("Escape hit, closing...")
+        break
+    
+    outs = model(frame)
+    
+    if outs:
+        for result in outs:
+            boxes = result.boxes 
+            for box in boxes:
+                conf_list=box.conf.tolist()
+                conf_list=np.array(conf_list)
+                max_conf=np.argmax(conf_list)
+                xy = box.xyxy[max_conf].tolist()
+                if conf_list[max_conf] >0.30:
+                    print("Center:", [(xy[0]+xy[2])/2, (xy[1]+xy[3])/2])
+                    start=(int(xy[0]),int(xy[1]))
+                    end=(int(xy[2]),int(xy[3]))
+                    
+                    frame = cv2.rectangle(frame, start, end, (0,255,0), 2) 
+                    frame = cv2.putText(frame, f'conf: {conf_list[max_conf]:.3f}', start,  cv2.FONT_HERSHEY_SIMPLEX , 0.8, (0,255,0), 2, cv2.LINE_AA) 
+    cv2.imshow("Test", frame)
+camera.release()
 cv2.destroyAllWindows()
-
-print("Video processing completed. Output video saved at:", output_video_path)

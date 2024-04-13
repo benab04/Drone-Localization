@@ -49,10 +49,12 @@ while True:
                 max_conf=np.argmax(conf_list)
                 xy = box.xyxy[max_conf].tolist()
                 if conf_list[max_conf] >0.30:
-                    print("Center:", [(xy[0]+xy[2])/2, (xy[1]+xy[3])/2])
+                    center_x=int((xy[0]+xy[2])/2)
+                    center_y=int( (xy[1]+xy[3])/2)
+                    print("Center:", [center_x,center_x])
                     start=(int(xy[0]),int(xy[1]))
                     end=(int(xy[2]),int(xy[3]))
-                    
+                    frame = cv2.circle(frame, (center_x, center_y), 4, (0, 0, 255), -1)
                     frame = cv2.rectangle(frame, start, end, (0,255,0), 2) 
                     frame = cv2.putText(frame, f'conf: {conf_list[max_conf]:.3f}', start,  cv2.FONT_HERSHEY_SIMPLEX , 0.8, (0,255,0), 2, cv2.LINE_AA) 
     cv2.imshow("Test", frame)

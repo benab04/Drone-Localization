@@ -3,6 +3,8 @@ import yaml
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
+import pyrealsense2
+from realsense_depth import *
 
 model = YOLO("runs/detect/train2/weights/200_epoch.pt")
 config = {
@@ -15,14 +17,16 @@ config = {
 
 with open("data.yaml", "w") as file:
     yaml.dump(config, file, default_flow_style=False)
+    
+dc = DepthCamera()
 
-camera = cv2.VideoCapture(0)
-camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+# camera = cv2.VideoCapture(0)
+# camera.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+# camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 img_counter = 0
 
 while True:
-    ret, frame = camera.read()
+    ret, depth_frame, frame = dc.get_frame()
 
     if not ret:
         print("Failed to grab frame")
@@ -56,5 +60,5 @@ while True:
                     frame = cv2.rectangle(frame, start, end, (0,255,0), 2) 
                     frame = cv2.putText(frame, f'conf: {conf_list[max_conf]:.3f}', start,  cv2.FONT_HERSHEY_SIMPLEX , 0.8, (0,255,0), 2, cv2.LINE_AA) 
     cv2.imshow("Test", frame)
-camera.release()
+# camera.release()
 cv2.destroyAllWindows()

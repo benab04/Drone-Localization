@@ -53,7 +53,9 @@ while True:
                 if conf_list[max_conf] >0.30:
                     center_x=int((xy[0]+xy[2])/2)
                     center_y=int( (xy[1]+xy[3])/2)
-                    print("Center:", [center_x,center_x])
+                    center_depth = depth_frame[center_y, center_x]  
+                    print("Center (x, y, z):", [center_x, center_y, center_depth])
+                    # print("Center:", [center_x,center_x])
                     start=(int(xy[0]),int(xy[1]))
                     end=(int(xy[2]),int(xy[3]))
                     frame = cv2.circle(frame, (center_x, center_y), 4, (0, 0, 255), -1)

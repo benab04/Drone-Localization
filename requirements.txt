@@ -2,3 +2,4 @@ matplotlib==3.8.4
 numpy==1.26.4
 opencv-python==4.9.0.80
 ultralytics==8.1.44
+pyrealsense2==2.55.1.6486
